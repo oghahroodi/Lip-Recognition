@@ -9,6 +9,7 @@ import os
 import os.path
 from subprocess import call
 
+
 def extract_files():
     """After we have all of our videos split between train and test, and
     all nested within folders representing their classes, we need to
@@ -31,7 +32,7 @@ def extract_files():
         class_folders = glob.glob(os.path.join(folder, '*'))
 
         for vid_class in class_folders:
-            class_files = glob.glob(os.path.join(vid_class, '*.avi'))
+            class_files = glob.glob(os.path.join(vid_class, '*.mp4'))
 
             for video_path in class_files:
                 # Get the parts of the file.
@@ -45,15 +46,17 @@ def extract_files():
                     # Now extract it.
                     src = os.path.join(train_or_test, classname, filename)
                     dest = os.path.join(train_or_test, classname,
-                        filename_no_ext + '-%04d.jpg')
+                                        filename_no_ext + '-%04d.jpg')
                     call(["ffmpeg", "-i", src, dest])
 
                 # Now get how many frames it is.
                 nb_frames = get_nb_frames_for_video(video_parts)
 
-                data_file.append([train_or_test, classname, filename_no_ext, nb_frames])
+                data_file.append(
+                    [train_or_test, classname, filename_no_ext, nb_frames])
 
-                print("Generated %d frames for %s" % (nb_frames, filename_no_ext))
+                print("Generated %d frames for %s" %
+                      (nb_frames, filename_no_ext))
 
     with open('data_file.csv', 'w') as fout:
         writer = csv.writer(fout)
@@ -61,13 +64,15 @@ def extract_files():
 
     print("Extracted and wrote %d video files." % (len(data_file)))
 
+
 def get_nb_frames_for_video(video_parts):
     """Given video parts of an (assumed) already extracted video, return
     the number of frames that were extracted."""
     train_or_test, classname, filename_no_ext, _ = video_parts
     generated_files = glob.glob(os.path.join(train_or_test, classname,
-                                filename_no_ext + '*.jpg'))
+                                             filename_no_ext + '*.jpg'))
     return len(generated_files)
+
 
 def get_video_parts(video_path):
     """Given a full path to a video, return its parts."""
@@ -79,11 +84,13 @@ def get_video_parts(video_path):
 
     return train_or_test, classname, filename_no_ext, filename
 
+
 def check_already_extracted(video_parts):
     """Check to see if we created the -0001 frame of this file."""
     train_or_test, classname, filename_no_ext, _ = video_parts
     return bool(os.path.exists(os.path.join(train_or_test, classname,
-                               filename_no_ext + '-0001.jpg')))
+                                            filename_no_ext + '-0001.jpg')))
+
 
 def main():
     """
@@ -93,6 +100,7 @@ def main():
     [train|test], class, filename, nb frames
     """
     extract_files()
+
 
 if __name__ == '__main__':
     main()

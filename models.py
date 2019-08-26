@@ -7,9 +7,10 @@ from keras.models import Sequential, load_model
 from keras.optimizers import Adam, RMSprop
 from keras.layers.wrappers import TimeDistributed
 from keras.layers.convolutional import (Conv2D, MaxPooling3D, Conv3D,
-    MaxPooling2D)
+                                        MaxPooling2D)
 from collections import deque
 import sys
+
 
 class ResearchModels():
     def __init__(self, nb_classes, model, seq_length,
@@ -48,7 +49,7 @@ class ResearchModels():
             self.model = self.lstm()
         elif model == 'lrcn':
             print("Loading CNN-LSTM model.")
-            self.input_shape = (seq_length, 80, 80, 3)
+            self.input_shape = (seq_length, 112, 112, 3)
             self.model = self.lrcn()
         elif model == 'mlp':
             print("Loading simple MLP.")
@@ -56,11 +57,11 @@ class ResearchModels():
             self.model = self.mlp()
         elif model == 'conv_3d':
             print("Loading Conv3D")
-            self.input_shape = (seq_length, 80, 80, 3)
+            self.input_shape = (seq_length, 112, 112, 3)
             self.model = self.conv_3d()
         elif model == 'c3d':
             print("Loading C3D")
-            self.input_shape = (seq_length, 80, 80, 3)
+            self.input_shape = (seq_length, 112, 112, 3)
             self.model = self.c3d()
         else:
             print("Unknown network.")
@@ -117,7 +118,7 @@ class ResearchModels():
             return model
 
         initialiser = 'glorot_uniform'
-        reg_lambda  = 0.001
+        reg_lambda = 0.001
 
         model = Sequential()
 
@@ -127,16 +128,21 @@ class ResearchModels():
                                   input_shape=self.input_shape))
         model.add(TimeDistributed(BatchNormalization()))
         model.add(TimeDistributed(Activation('relu')))
-        model.add(TimeDistributed(Conv2D(32, (3,3), kernel_initializer=initialiser, kernel_regularizer=L2_reg(l=reg_lambda))))
+        model.add(TimeDistributed(Conv2D(
+            32, (3, 3), kernel_initializer=initialiser, kernel_regularizer=L2_reg(l=reg_lambda))))
         model.add(TimeDistributed(BatchNormalization()))
         model.add(TimeDistributed(Activation('relu')))
         model.add(TimeDistributed(MaxPooling2D((2, 2), strides=(2, 2))))
 
         # 2nd-5th (default) blocks
-        model = add_default_block(model, 64,  init=initialiser, reg_lambda=reg_lambda)
-        model = add_default_block(model, 128, init=initialiser, reg_lambda=reg_lambda)
-        model = add_default_block(model, 256, init=initialiser, reg_lambda=reg_lambda)
-        model = add_default_block(model, 512, init=initialiser, reg_lambda=reg_lambda)
+        model = add_default_block(
+            model, 64,  init=initialiser, reg_lambda=reg_lambda)
+        model = add_default_block(
+            model, 128, init=initialiser, reg_lambda=reg_lambda)
+        model = add_default_block(
+            model, 256, init=initialiser, reg_lambda=reg_lambda)
+        model = add_default_block(
+            model, 512, init=initialiser, reg_lambda=reg_lambda)
 
         # LSTM output head
         model.add(TimeDistributed(Flatten()))
@@ -167,16 +173,16 @@ class ResearchModels():
         # Model.
         model = Sequential()
         model.add(Conv3D(
-            32, (3,3,3), activation='relu', input_shape=self.input_shape
+            32, (3, 3, 3), activation='relu', input_shape=self.input_shape
         ))
         model.add(MaxPooling3D(pool_size=(1, 2, 2), strides=(1, 2, 2)))
-        model.add(Conv3D(64, (3,3,3), activation='relu'))
+        model.add(Conv3D(64, (3, 3, 3), activation='relu'))
         model.add(MaxPooling3D(pool_size=(1, 2, 2), strides=(1, 2, 2)))
-        model.add(Conv3D(128, (3,3,3), activation='relu'))
-        model.add(Conv3D(128, (3,3,3), activation='relu'))
+        model.add(Conv3D(128, (3, 3, 3), activation='relu'))
+        model.add(Conv3D(128, (3, 3, 3), activation='relu'))
         model.add(MaxPooling3D(pool_size=(1, 2, 2), strides=(1, 2, 2)))
-        model.add(Conv3D(256, (2,2,2), activation='relu'))
-        model.add(Conv3D(256, (2,2,2), activation='relu'))
+        model.add(Conv3D(256, (2, 2, 2), activation='relu'))
+        model.add(Conv3D(256, (2, 2, 2), activation='relu'))
         model.add(MaxPooling3D(pool_size=(1, 2, 2), strides=(1, 2, 2)))
 
         model.add(Flatten())

@@ -7,21 +7,27 @@ Should only run this file once!
 import os
 import os.path
 
+
+train_data = 'train_data'
+test_data = 'test_data'
+
+
 def get_train_test_lists(version='01'):
     """
     Using one of the train/test files (01, 02, or 03), get the filename
     breakdowns we'll later use to move everything.
     """
     # Get our files based on version.
-    test_file = os.path.join('ucfTrainTestlist', 'testlist' + version + '.txt')
-    train_file = os.path.join('ucfTrainTestlist', 'trainlist' + version + '.txt')
+    # test_file = os.path.join('ucfTrainTestlist', 'testlist' + version + '.txt')
+    # train_file = os.path.join(
+    #     'ucfTrainTestlist', 'trainlist' + version + '.txt')
 
     # Build the test list.
-    with open(test_file) as fin:
+    with open(test_data) as fin:
         test_list = [row.strip() for row in list(fin)]
 
     # Build the train list. Extra step to remove the class index.
-    with open(train_file) as fin:
+    with open(train_data) as fin:
         train_list = [row.strip() for row in list(fin)]
         train_list = [row.split(' ')[0] for row in train_list]
 
@@ -33,8 +39,10 @@ def get_train_test_lists(version='01'):
 
     return file_groups
 
+
 def move_files(file_groups):
-    """This assumes all of our files are currently in _this_ directory.
+    """
+    This assumes all of our files are currently in _this_ directory.
     So move them to the appropriate spot. Only needs to happen once.
     """
     # Do each of our groups.
@@ -66,6 +74,7 @@ def move_files(file_groups):
 
     print("Done.")
 
+
 def main():
     """
     Go through each of our train/test text files and move the videos
@@ -73,9 +82,11 @@ def main():
     """
     # Get the videos in groups so we can move them.
     group_lists = get_train_test_lists()
+    # print(group_lists)
 
     # Move the files.
     move_files(group_lists)
+
 
 if __name__ == '__main__':
     main()

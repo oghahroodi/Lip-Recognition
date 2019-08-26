@@ -20,7 +20,8 @@ data = DataSet()
 
 # Helper: Save the model.
 checkpointer = ModelCheckpoint(
-    filepath=os.path.join('data', 'checkpoints', 'inception.{epoch:03d}-{val_loss:.2f}.hdf5'),
+    filepath=os.path.join('data', 'checkpoints',
+                          'inception.{epoch:03d}-{val_loss:.2f}.hdf5'),
     verbose=1,
     save_best_only=True)
 
@@ -29,6 +30,7 @@ early_stopper = EarlyStopping(patience=10)
 
 # Helper: TensorBoard
 tensorboard = TensorBoard(log_dir=os.path.join('data', 'logs'))
+
 
 def get_generators():
     train_datagen = ImageDataGenerator(
@@ -57,6 +59,7 @@ def get_generators():
 
     return train_generator, validation_generator
 
+
 def get_model(weights='imagenet'):
     # create the base pre-trained model
     base_model = InceptionV3(weights=weights, include_top=False)
@@ -73,6 +76,7 @@ def get_model(weights='imagenet'):
     model = Model(inputs=base_model.input, outputs=predictions)
     return model
 
+
 def freeze_all_but_top(model):
     """Used to train just the top layers of the model."""
     # first: train only the top layers (which were randomly initialized)
@@ -81,9 +85,11 @@ def freeze_all_but_top(model):
         layer.trainable = False
 
     # compile the model (should be done *after* setting layers to non-trainable)
-    model.compile(optimizer='rmsprop', loss='categorical_crossentropy', metrics=['accuracy'])
+    model.compile(optimizer='rmsprop',
+                  loss='categorical_crossentropy', metrics=['accuracy'])
 
     return model
+
 
 def freeze_all_but_mid_and_top(model):
     """After we fine-tune the dense layers, train deeper."""
@@ -103,6 +109,7 @@ def freeze_all_but_mid_and_top(model):
 
     return model
 
+
 def train_model(model, nb_epoch, generators, callbacks=[]):
     train_generator, validation_generator = generators
     model.fit_generator(
@@ -113,6 +120,7 @@ def train_model(model, nb_epoch, generators, callbacks=[]):
         epochs=nb_epoch,
         callbacks=callbacks)
     return model
+
 
 def main(weights_file):
     model = get_model()
@@ -131,6 +139,7 @@ def main(weights_file):
     model = freeze_all_but_mid_and_top(model)
     model = train_model(model, 1000, generators,
                         [checkpointer, early_stopper, tensorboard])
+
 
 if __name__ == '__main__':
     weights_file = None

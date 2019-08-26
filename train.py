@@ -7,13 +7,14 @@ from data import DataSet
 import time
 import os.path
 
+
 def train(data_type, seq_length, model, saved_model=None,
           class_limit=None, image_shape=None,
           load_to_memory=False, batch_size=32, nb_epoch=100):
     # Helper: Save the model.
     checkpointer = ModelCheckpoint(
-        filepath=os.path.join('data', 'checkpoints', model + '-' + data_type + \
-            '.{epoch:03d}-{val_loss:.3f}.hdf5'),
+        filepath=os.path.join('data', 'checkpoints', model + '-' + data_type +
+                              '.{epoch:03d}-{val_loss:.3f}.hdf5'),
         verbose=1,
         save_best_only=True)
 
@@ -25,8 +26,8 @@ def train(data_type, seq_length, model, saved_model=None,
 
     # Helper: Save results.
     timestamp = time.time()
-    csv_logger = CSVLogger(os.path.join('data', 'logs', model + '-' + 'training-' + \
-        str(timestamp) + '.log'))
+    csv_logger = CSVLogger(os.path.join('data', 'logs', model + '-' + 'training-' +
+                                        str(timestamp) + '.log'))
 
     # Get the data and process it.
     if image_shape is None:
@@ -80,6 +81,7 @@ def train(data_type, seq_length, model, saved_model=None,
             validation_steps=40,
             workers=4)
 
+
 def main():
     """These are the main training settings. Set each before running
     this file."""
@@ -95,7 +97,7 @@ def main():
     # Chose images or features and image shape based on network.
     if model in ['conv_3d', 'c3d', 'lrcn']:
         data_type = 'images'
-        image_shape = (80, 80, 3)
+        image_shape = (112, 112, 3)
     elif model in ['lstm', 'mlp']:
         data_type = 'features'
         image_shape = None
@@ -105,6 +107,7 @@ def main():
     train(data_type, seq_length, model, saved_model=saved_model,
           class_limit=class_limit, image_shape=image_shape,
           load_to_memory=load_to_memory, batch_size=batch_size, nb_epoch=nb_epoch)
+
 
 if __name__ == '__main__':
     main()

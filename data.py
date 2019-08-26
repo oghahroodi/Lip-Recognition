@@ -12,6 +12,7 @@ import threading
 from processor import process_image
 from keras.utils import to_categorical
 
+
 class threadsafe_iterator:
     def __init__(self, iterator):
         self.iterator = iterator
@@ -24,16 +25,19 @@ class threadsafe_iterator:
         with self.lock:
             return next(self.iterator)
 
+
 def threadsafe_generator(func):
     """Decorator"""
     def gen(*a, **kw):
         return threadsafe_iterator(func(*a, **kw))
     return gen
 
+
 class DataSet():
 
-    def __init__(self, seq_length=40, class_limit=None, image_shape=(224, 224, 3)):
-        """Constructor.
+    def __init__(self, seq_length=40, class_limit=None, image_shape=(112, 112, 3)):
+        """
+        Constructor.
         seq_length = (int) the number of frames to consider
         class_limit = (int) number of classes to limit the data to.
             None = no limit.
@@ -124,7 +128,8 @@ class DataSet():
         train, test = self.split_train_test()
         data = train if train_test == 'train' else test
 
-        print("Loading %d samples into memory for %sing." % (len(data), train_test))
+        print("Loading %d samples into memory for %sing." %
+              (len(data), train_test))
 
         X, y = [], []
         for row in data:
@@ -159,7 +164,8 @@ class DataSet():
         train, test = self.split_train_test()
         data = train if train_test == 'train' else test
 
-        print("Creating %s generator with %d samples." % (train_test, len(data)))
+        print("Creating %s generator with %d samples." %
+              (train_test, len(data)))
 
         while 1:
             X, y = [], []
@@ -185,7 +191,8 @@ class DataSet():
                     sequence = self.get_extracted_sequence(data_type, sample)
 
                     if sequence is None:
-                        raise ValueError("Can't find sequence. Did you generate them?")
+                        raise ValueError(
+                            "Can't find sequence. Did you generate them?")
 
                 X.append(sequence)
                 y.append(self.get_class_one_hot(sample[1]))
@@ -199,8 +206,8 @@ class DataSet():
     def get_extracted_sequence(self, data_type, sample):
         """Get the saved extracted features."""
         filename = sample[2]
-        path = os.path.join(self.sequence_path, filename + '-' + str(self.seq_length) + \
-            '-' + data_type + '.npy')
+        path = os.path.join(self.sequence_path, filename + '-' + str(self.seq_length) +
+                            '-' + data_type + '.npy')
         if os.path.isfile(path):
             return np.load(path)
         else:

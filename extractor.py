@@ -4,6 +4,7 @@ from keras.models import Model, load_model
 from keras.layers import Input
 import numpy as np
 
+
 class Extractor():
     def __init__(self, weights=None):
         """Either load pretrained from imagenet, or load our saved

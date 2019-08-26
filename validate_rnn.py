@@ -6,6 +6,7 @@ from keras.callbacks import TensorBoard, ModelCheckpoint, CSVLogger
 from models import ResearchModels
 from data import DataSet
 
+
 def validate(data_type, model, seq_length=40, saved_model=None,
              class_limit=None, image_shape=None):
     batch_size = 32
@@ -36,6 +37,7 @@ def validate(data_type, model, seq_length=40, saved_model=None,
     print(results)
     print(rm.model.metrics_names)
 
+
 def main():
     model = 'lstm'
     saved_model = 'data/checkpoints/lstm-features.026-0.239.hdf5'
@@ -49,6 +51,7 @@ def main():
 
     validate(data_type, model, saved_model=saved_model,
              image_shape=image_shape, class_limit=4)
+
 
 if __name__ == '__main__':
     main()

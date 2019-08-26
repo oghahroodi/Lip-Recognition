@@ -19,7 +19,8 @@ from tqdm import tqdm
 
 # Set defaults.
 seq_length = 40
-class_limit = None  # Number of classes to extract. Can be 1-101 or None for all.
+# Number of classes to extract. Can be 1-101 or None for all.
+class_limit = None
 
 # Get the dataset.
 data = DataSet(seq_length=seq_length, class_limit=class_limit)
@@ -32,8 +33,8 @@ pbar = tqdm(total=len(data.data))
 for video in data.data:
 
     # Get the path to the sequence for this video.
-    path = os.path.join('data', 'sequences', video[2] + '-' + str(seq_length) + \
-        '-features')  # numpy will auto-append .npy
+    path = os.path.join('data', 'sequences', video[2] + '-' + str(seq_length) +
+                        '-features')  # numpy will auto-append .npy
 
     # Check if we already have it.
     if os.path.isfile(path + '.npy'):

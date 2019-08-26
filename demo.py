@@ -12,6 +12,7 @@ from keras.models import load_model
 from data import DataSet
 import numpy as np
 
+
 def predict(data_type, seq_length, saved_model, image_shape, video_name, class_limit):
     model = load_model(saved_model)
 
@@ -20,8 +21,8 @@ def predict(data_type, seq_length, saved_model, image_shape, video_name, class_l
         data = DataSet(seq_length=seq_length, class_limit=class_limit)
     else:
         data = DataSet(seq_length=seq_length, image_shape=image_shape,
-            class_limit=class_limit)
-    
+                       class_limit=class_limit)
+
     # Extract the sample from the data.
     sample = data.get_frames_by_filename(video_name, data_type)
 
@@ -29,6 +30,7 @@ def predict(data_type, seq_length, saved_model, image_shape, video_name, class_l
     prediction = model.predict(np.expand_dims(sample, axis=0))
     print(prediction)
     data.print_class_from_prediction(np.squeeze(prediction, axis=0))
+
 
 def main():
     # model can be one of lstm, lrcn, mlp, conv_3d, c3d.
@@ -52,14 +54,16 @@ def main():
     # Chose images or features and image shape based on network.
     if model in ['conv_3d', 'c3d', 'lrcn']:
         data_type = 'images'
-        image_shape = (80, 80, 3)
+        image_shape = (112, 112, 3)
     elif model in ['lstm', 'mlp']:
         data_type = 'features'
         image_shape = None
     else:
         raise ValueError("Invalid model. See train.py for options.")
 
-    predict(data_type, seq_length, saved_model, image_shape, video_name, class_limit)
+    predict(data_type, seq_length, saved_model,
+            image_shape, video_name, class_limit)
+
 
 if __name__ == '__main__':
     main()
