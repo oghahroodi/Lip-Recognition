@@ -14,6 +14,9 @@ class Extractor():
 
         if weights is None:
             # Get model with pretrained weights.
+            ###### TODO test another base model like https://keras.io/applications/#resnet
+
+            ###### TODO imagenet???
             base_model = InceptionV3(
                 weights='imagenet',
                 include_top=True
@@ -29,6 +32,8 @@ class Extractor():
             # Load the model first.
             self.model = load_model(weights)
 
+            ######## beporsim
+
             # Then remove the top so we get features not predictions.
             # From: https://github.com/fchollet/keras/issues/2371
             self.model.layers.pop()
@@ -38,6 +43,7 @@ class Extractor():
             self.model.layers[-1].outbound_nodes = []
 
     def extract(self, image_path):
+        ###### beporsim 299?
         img = image.load_img(image_path, target_size=(299, 299))
         x = image.img_to_array(img)
         x = np.expand_dims(x, axis=0)

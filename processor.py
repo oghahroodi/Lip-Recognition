@@ -11,6 +11,8 @@ def process_image(image, target_shape):
     h, w, _ = target_shape
     image = load_img(image, target_size=(h, w))
 
+    ######## TODO gray scale
+
     # Turn it into numpy, normalize and return.
     img_arr = img_to_array(image)
     x = (img_arr / 255.).astype(np.float32)
