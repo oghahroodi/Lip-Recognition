@@ -1,11 +1,15 @@
 """
 Train our RNN on extracted features or images.
 """
+import os
+import plaidml.keras
+os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
 from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping, CSVLogger
 from models import ResearchModels
 from data import DataSet
 import time
 import os.path
+
 
 
 def train(data_type, seq_length, model, saved_model=None,
@@ -91,8 +95,8 @@ def main():
     class_limit = None  # int, can be 1-101 or None
     seq_length = 40
     load_to_memory = False  # pre-load the sequences into memory
-    batch_size = 32
-    nb_epoch = 1000
+    batch_size = 5
+    nb_epoch = 30
 
     # Chose images or features and image shape based on network.
     if model in ['conv_3d', 'c3d', 'lrcn']:

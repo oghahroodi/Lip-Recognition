@@ -32,7 +32,7 @@ def validate(data_type, model, seq_length=40, saved_model=None,
     # Evaluate!
     results = rm.model.evaluate_generator(
         generator=val_generator,
-        val_samples=3200)
+        val_samples=848)
 
     print(results)
     print(rm.model.metrics_names)
@@ -40,7 +40,7 @@ def validate(data_type, model, seq_length=40, saved_model=None,
 
 def main():
     model = 'lstm'
-    saved_model = 'data/checkpoints/lstm-features.026-0.239.hdf5'
+    saved_model = 'data\\checkpoints\\lstm-features.006-7.090.hdf5'
 
     if model == 'conv_3d' or model == 'lrcn':
         data_type = 'images'
@@ -50,7 +50,7 @@ def main():
         image_shape = None
 
     validate(data_type, model, saved_model=saved_model,
-             image_shape=image_shape, class_limit=4)
+             image_shape=image_shape, class_limit=1626)
 
 
 if __name__ == '__main__':

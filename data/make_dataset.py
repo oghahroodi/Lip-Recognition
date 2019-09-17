@@ -5,7 +5,7 @@ import glob
 
 train_data = 'train_data'
 test_data = 'test_data'
-dataset_path = '../../Data_Set/lrs3/'
+dataset_path = '../../Data_Set/'
 id_path = 'id_path'
 train_percent = 80
 

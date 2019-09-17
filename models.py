@@ -36,8 +36,8 @@ class ResearchModels():
 
         # Set the metrics. Only use top k if there's a need.
         metrics = ['accuracy']
-        if self.nb_classes >= 10:
-            metrics.append('top_k_categorical_accuracy')
+        # if self.nb_classes >= 10:
+        #     metrics.append('top_k_categorical_accuracy')
 
         # Get the appropriate model.
         if self.saved_model is not None:
