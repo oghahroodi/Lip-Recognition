@@ -1,15 +1,14 @@
+import os.path
+import time
+from data import DataSet
+from models import ResearchModels
+from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping, CSVLogger
 """
 Train our RNN on extracted features or images.
 """
 import os
 import plaidml.keras
 os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping, CSVLogger
-from models import ResearchModels
-from data import DataSet
-import time
-import os.path
-
 
 
 def train(data_type, seq_length, model, saved_model=None,

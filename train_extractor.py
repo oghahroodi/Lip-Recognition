@@ -1,8 +1,9 @@
+import csv
 from __future__ import print_function
 import os
 import plaidml.keras
 os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-import csv
+
 
 def get_data():
     """Load our data from file."""
@@ -11,6 +12,7 @@ def get_data():
         data = list(reader)
 
     return data
+
 
 def split_train_test():
     """Split the data into train and test groups."""
@@ -22,7 +24,6 @@ def split_train_test():
         else:
             test.append(item)
     return train, test
-
 
 
 x_train = []

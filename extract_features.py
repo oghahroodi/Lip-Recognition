@@ -1,3 +1,8 @@
+from tqdm import tqdm
+from extractor import Extractor
+from data import DataSet
+import os.path
+import numpy as np
 """
 This script generates extracted features for each video, which other
 models make use of.
@@ -14,11 +19,6 @@ Then set the same number when training models.
 import os
 import plaidml.keras
 os.environ["KERAS_BACKEND"] = "plaidml.keras.backend"
-import numpy as np
-import os.path
-from data import DataSet
-from extractor import Extractor
-from tqdm import tqdm
 
 # Set defaults.
 seq_length = 40

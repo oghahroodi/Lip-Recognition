@@ -9,16 +9,16 @@ count = {}
 
 # print(text_file)
 for i in text_file:
-    f = open(i,'r+')
+    f = open(i, 'r+')
     # print(f.read().split('\n'))
     l = f.read().split('\n')
-    
-    for j in range(4,len(l)-1):
+
+    for j in range(4, len(l)-1):
         word = l[j].split()[0]
         if word not in count.keys():
-            count[word]=1
+            count[word] = 1
         else:
-            count[word]+=1
+            count[word] += 1
     # break
 
 # print(count)
